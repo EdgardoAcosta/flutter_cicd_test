@@ -35,20 +35,20 @@ pipeline {
           container('flutter'){
             sh 'flutter doctor'
             sh 'flutter --version'
+            sh 'dart pub global activate junitreport'
+            sh 'flutter pub'
           }
         }
     }
-    // stage('Test') {
-      // steps{
-        //  container('flutterImage'){
-            // sh 'flutter pub add junitreport'
-            // sh 'flutter pub add junitreport'
-            // sh 'flutter test --reporter json > test_result.jsonl'
-            // sh 'dart pub global run junitreport:tojunit --input test_result.jsonl --output test-results.xml'
-            // junit 'test-results.xml'
-          // }
-      // }
-    // }
+    stage('Test') {
+      steps{
+         container('flutter'){
+            sh 'flutter test --reporter json > test_result.jsonl'
+            sh 'dart pub global run junitreport:tojunit --input test_result.jsonl --output test-results.xml'
+            junit 'test-results.xml'
+          }
+      }
+    }
   }  
   post {
     failure {
