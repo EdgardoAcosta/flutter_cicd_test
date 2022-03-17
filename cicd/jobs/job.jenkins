@@ -1,0 +1,54 @@
+#!/usr/bin/env groovy
+
+pipelineJob('flutter-cicd') {
+    def repo = 'https://github.com/EdgardoAcosta/flutter_cicd_test.git' 
+    def repoName = 'EdgardoAcosta/flutter_cicd_test'
+    def sshRepo = 'git@github.com:EdgardoAcosta/flutter_cicd_test.git'
+    
+    description("Flutter pipeline")
+    keepDependencies(false)
+    properties{ 
+        githubProjectUrl ('https://github.com/EdgardoAcosta/flutter_cicd_test') 
+    } 
+
+    definition{
+        cpsScm{
+            scm {
+                git {
+                    remote {
+                        github(repoName, 'ssh')
+                        //url(sshRepo)
+                        name('origin')
+                        // refspec('+refs/pull/*:refs/remotes/origin/pr/*')
+                        refspec('+refs/pull/${ghprbPullId}/*:refs/remotes/origin/pr/${ghprbPullId}/*')
+                        credentials('k8s-ssh2')
+                    }
+                    branch('${sha1}')
+                }
+            }
+            scriptPath('cicd/pipelines/k8s.jenkins')
+            triggers { 
+                githubPullRequest {
+                    useGitHubHooks()
+                    userWhitelist(['EdgardoAcosta'])
+                    autoCloseFailedPullRequests()
+                    extensions {
+                        commitStatus {
+                            context('Jenkins')
+                            addTestResults(true)
+                            completedStatus('SUCCESS', 'All is well')
+                            completedStatus('FAILURE', 'Something went wrong. Investigate!')
+                            completedStatus('PENDING', 'still in progress...')
+                            completedStatus('ERROR', 'Something went really wrong. Investigate!')
+                        }
+                        buildStatus {
+                            completedStatus('SUCCESS', 'There were no errors')
+                            completedStatus('FAILURE', 'There were errors')
+                            completedStatus('ERROR', 'There was an error in the infrastructure')
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
