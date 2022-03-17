@@ -33,10 +33,11 @@ pipeline {
         steps{
           slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} for PR ${ghprbPullLink} by ${ghprbPullAuthorLoginMention}"
           container('flutter'){
+            sh 'export PATH="$PATH":"$HOME/.pub-cache/bin"'
             sh 'flutter doctor'
             sh 'flutter --version'
             sh 'dart pub global activate junitreport'
-            sh 'flutter pub'
+            sh 'flutter pub get'
           }
         }
     }
