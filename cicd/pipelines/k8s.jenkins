@@ -38,8 +38,8 @@ pipeline {
           }
         }
     }
-    stage('Test') {
-      steps{
+    // stage('Test') {
+      // steps{
         //  container('flutterImage'){
             // sh 'flutter pub add junitreport'
             // sh 'flutter pub add junitreport'
@@ -47,8 +47,8 @@ pipeline {
             // sh 'dart pub global run junitreport:tojunit --input test_result.jsonl --output test-results.xml'
             // junit 'test-results.xml'
           // }
-      }
-    }
+      // }
+    // }
   }  
   post {
     failure {
