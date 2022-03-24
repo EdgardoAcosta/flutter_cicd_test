@@ -64,7 +64,7 @@ pipeline {
         container('flutter'){
           withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
             sh 'ls'
-            env.S3LIST = $(s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true)
+            env.S3LIST = 's3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true'
             echo $S3LIST
           }
         }
