@@ -49,20 +49,24 @@ pipeline {
           }
       }
     }
-    // stage('BUILD') {
-    //   steps{
-    //      container('flutter'){
-    //         // sh 'flutter build apk'
-    //       }
-    //   }
-    // }
+    stage('BUILD') {
+      steps{
+         container('flutter'){
+            sh 'flutter build apk'
+          }
+      }
+    }
     stage('UPLOAD') {
       environment {
         S3_BUCKET = 'ef-test-bucket'
       }
       steps{ 
-       withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
-         s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
+        container('flutter'){
+          withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
+            sh 'ls'
+            env.S3LIST = $(s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true)
+            echo $S3LIST
+          }
         }
       }
     }
