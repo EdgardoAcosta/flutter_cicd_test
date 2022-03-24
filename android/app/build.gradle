@@ -65,4 +65,50 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+
+    // CameraX core library using camera2 implementation
+    def camerax_version = "1.0.2"
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha31"
+    implementation "androidx.concurrent:concurrent-futures-ktx:1.1.0"
+    implementation 'com.google.guava:guava:29.0-android'
+    implementation 'org.jetbrains.anko:anko-commons:0.10.8'
+    implementation 'com.caverock:androidsvg-aar:1.4'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
+    implementation "com.google.android.material:material:1.6.0-alpha01"
+
+
+    def work_version = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    //Firebase
+    googleImplementation platform('com.google.firebase:firebase-bom:28.4.0')
+    googleImplementation('com.google.firebase:firebase-analytics-ktx')
+    googleImplementation('com.google.firebase:firebase-crashlytics-ktx')
+    googleImplementation('com.google.firebase:firebase-perf-ktx')
+    googleImplementation('com.google.firebase:firebase-messaging')
+    googleImplementation('com.google.mlkit:barcode-scanning:17.0.0')
+    googleImplementation('com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.1')
+    googleImplementation('com.google.android.gms:play-services-location:18.0.0')
+
+
+
+    //Huawei flavor
+//    huaweiImplementation 'com.huawei.agconnect:agconnect-core:1.6.0.300'
+//    huaweiImplementation 'com.huawei.agconnect:agconnect-crash:1.6.0.300'
+//    huaweiImplementation 'com.huawei.hms:location:6.0.0.302'
+//    huaweiImplementation 'com.huawei.hms:push:5.3.0.304'
+//    huaweiImplementation 'com.huawei.hms:hianalytics:6.2.0.301'
+//    huaweiImplementation 'com.huawei.hms:scan:2.1.0.300'
+//
+//    huaweiImplementation 'com.huawei.hms:site:5.1.0.300'
+//    huaweiImplementation 'com.huawei.hms:maps:5.1.0.300'
+
 }
+
+//Google Plugins
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
