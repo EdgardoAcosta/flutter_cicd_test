@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-
+@Library('github.com/releaseworks/jenkinslib') _
 def nodeLabel = "jenkins-slave-${UUID.randomUUID().toString()}"
 pipeline {
 
