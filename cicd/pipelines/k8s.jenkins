@@ -58,10 +58,8 @@ pipeline {
     //   }
     // }
     stage('UPLOAD') {
-      steps{
-         container('flutter'){
-            sh 'aws s3 ls'
-          }
+      steps{ 
+        sh 'aws s3 ls'
       }
     }
   }  
