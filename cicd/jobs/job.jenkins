@@ -21,7 +21,7 @@ pipelineJob('flutter-cicd') {
                         name('origin')
                         // refspec('+refs/pull/*:refs/remotes/origin/pr/*')
                         refspec('+refs/pull/${ghprbPullId}/*:refs/remotes/origin/pr/${ghprbPullId}/*')
-                        credentials('k8s-ssh2')
+                        credentials('flutter-cicd-test-key')
                     }
                     branch('${sha1}')
                 }
