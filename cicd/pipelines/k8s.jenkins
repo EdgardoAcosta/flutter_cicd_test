@@ -50,17 +50,17 @@ pipeline {
           }
       }
     }
-    stage('BUILD') {
-      steps{
-         container('flutter'){
-            sh 'flutter build apk'
-          }
-      }
-    }
+    // stage('BUILD') {
+    //   steps{
+    //      container('flutter'){
+    //         // sh 'flutter build apk'
+    //       }
+    //   }
+    // }
     stage('UPLOAD') {
       steps{
          container('flutter'){
-            sh 'aws s3api list-buckets --query "Buckets[].Name"'
+            sh 'aws s3 ls'
           }
       }
     }
