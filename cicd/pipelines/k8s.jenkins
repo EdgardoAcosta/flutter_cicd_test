@@ -58,8 +58,14 @@ pipeline {
     //   }
     // }
     stage('UPLOAD') {
+      environment {
+        S3_BUCKET = 'ef-test-bucket'
+      }
       steps{ 
-        AWS("s3 ls")
+       withAWS(credentials: 'saws-cli-credentials', region: 'us-west-2') {
+          files = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
+          echo files
+        }
       }
     }
   }  
