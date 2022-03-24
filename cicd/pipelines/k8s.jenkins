@@ -32,9 +32,9 @@ pipeline {
         steps{
           slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} for PR ${ghprbPullLink} by ${ghprbPullAuthorLoginMention}"
           container('flutter'){
-            sh 'export PATH="$PATH":"$HOME/.pub-cache/bin"'
             sh 'flutter doctor'
             sh 'flutter --version'
+            sh 'export PATH="$PATH":"$HOME/.pub-cache/bin"'
             sh 'dart pub global activate junitreport'
             sh 'flutter pub get'
           }
@@ -61,7 +61,7 @@ pipeline {
         S3_BUCKET = 'ef-test-bucket'
       }
       steps{ 
-       withAWS(credentials: 'aws-cli-credentials', region: 'us-west-2') {
+       withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
          s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
         }
       }
