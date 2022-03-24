@@ -50,6 +50,20 @@ pipeline {
           }
       }
     }
+    stage('BUILD') {
+      steps{
+         container('flutter'){
+            sh 'flutter build apk --flavor google'
+          }
+      }
+    }
+    stage('UPLOAD') {
+      steps{
+         container('flutter'){
+            sh 'aws s3api list-buckets --query "Buckets[].Name"'
+          }
+      }
+    }
   }  
   post {
     failure {
