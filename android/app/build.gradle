@@ -83,16 +83,6 @@ dependencies {
     def work_version = "2.7.1"
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    //Firebase
-    googleImplementation platform('com.google.firebase:firebase-bom:28.4.0')
-    googleImplementation('com.google.firebase:firebase-analytics-ktx')
-    googleImplementation('com.google.firebase:firebase-crashlytics-ktx')
-    googleImplementation('com.google.firebase:firebase-perf-ktx')
-    googleImplementation('com.google.firebase:firebase-messaging')
-    googleImplementation('com.google.mlkit:barcode-scanning:17.0.0')
-    googleImplementation('com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.1')
-    googleImplementation('com.google.android.gms:play-services-location:18.0.0')
-
 
 
     //Huawei flavor
@@ -108,7 +98,3 @@ dependencies {
 
 }
 
-//Google Plugins
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'com.google.firebase.firebase-perf'
