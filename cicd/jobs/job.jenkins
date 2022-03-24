@@ -31,7 +31,7 @@ pipelineJob('flutter-cicd') {
                 githubPullRequest {
                     useGitHubHooks()
                     userWhitelist(['EdgardoAcosta'])
-                    autoCloseFailedPullRequests()
+                    // autoCloseFailedPullRequests()
                     extensions {
                         commitStatus {
                             context('Jenkins')
