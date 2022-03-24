@@ -66,9 +66,10 @@ pipeline {
           withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
             script {
               S3LIST = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
+              echo ${S3LIST}
             }
-            sh 'ls'
-            echo "list " + env.S3LIST
+            sh 'ls build'
+            // echo "list " + env.S3LIST
           }
         }
       }
