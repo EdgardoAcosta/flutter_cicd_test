@@ -49,13 +49,13 @@ pipeline {
           }
       }
     }
-    // stage('BUILD') {
-    //   steps{
-    //      container('flutter'){
-    //         sh 'flutter build apk'
-    //       }
-    //   }
-    // }
+    stage('BUILD') {
+      steps{
+         container('flutter'){
+            sh 'flutter build apk'
+          }
+      }
+    }
     stage('UPLOAD') {
       environment {
         S3_BUCKET = 'ef-test-bucket'
