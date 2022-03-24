@@ -62,8 +62,7 @@ pipeline {
       }
       steps{ 
        withAWS(credentials: 'aws-cli-credentials', region: 'us-west-2') {
-          env.FILES = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
-          echo "${FILES}"
+         echo s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
         }
       }
     }
