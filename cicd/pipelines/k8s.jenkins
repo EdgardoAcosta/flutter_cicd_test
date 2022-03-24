@@ -59,7 +59,7 @@ pipeline {
     // }
     stage('UPLOAD') {
       steps{ 
-        sh 'aws s3 ls'
+        AWS("s3 ls")
       }
     }
   }  
