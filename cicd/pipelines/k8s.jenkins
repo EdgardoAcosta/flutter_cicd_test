@@ -66,7 +66,7 @@ pipeline {
           withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
             script {
               sh 'ls build/app/outputs/flutter-apk/'
-              s3Upload bucket: S3_BUCKET,  file:'app-release.apk', path:'build/app/outputs/flutter-apk/app-release.apk', pathStyleAccessEnabled: true, payloadSigningEnabled: true,
+              s3Upload bucket: S3_BUCKET,file:'app-release.apk', path:'build/app/outputs/flutter-apk/app-release.apk', pathStyleAccessEnabled: true, payloadSigningEnabled: true
               S3LIST = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
               echo "${S3LIST}"
             }
