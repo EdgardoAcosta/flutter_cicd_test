@@ -6,6 +6,7 @@ pipeline {
     POD_NAME = "jenkins-slave-${UUID.randomUUID().toString()}"
     SLACK_USER_ID = slackUserIdFromEmail "${ghprbActualCommitAuthorEmail}"
     SLACK_THREAD = ""
+    PROJECT_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
   }
   agent {
     kubernetes {
@@ -26,9 +27,6 @@ pipeline {
             tty: true
       """
     }
-  }
-  environment{
-      PROJECT_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
   }
   stages {
        stage('Install Dependencies') {
