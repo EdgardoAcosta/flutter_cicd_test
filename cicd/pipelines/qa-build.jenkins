@@ -50,10 +50,18 @@ pipeline {
           }
       }
     }
-    stage('BUILD') {
+    stage('Build andoid APK') {
       steps{
          container('flutter'){
             sh 'flutter build apk'
+          }
+      }
+    }
+    }
+    stage('Build ios IPA') {
+      steps{
+         container('flutter'){
+            echo 'to implement...'
           }
       }
     }
