@@ -31,7 +31,7 @@ pipeline {
   stages {
        stage('Install Dependencies') {
         steps{
-          slackSend message: "QA build for project ${env.PROJECT_NAME} in branch ${env.branch}"
+          slackSend message: "QA build started for project *${env.PROJECT_NAME}* in branch *${env.branch}*"
           container('flutter'){
             sh 'flutter doctor'
             sh 'flutter --version'
@@ -76,15 +76,12 @@ pipeline {
       steps{ 
         withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
           container('flutter'){
-            sh 'ls'
             s3Upload bucket: S3_BUCKET,file:"./build/app/outputs/flutter-apk/${S3_FILE_NAME}.apk", acl: 'PublicRead' , pathStyleAccessEnabled: true, payloadSigningEnabled: true
             script {
               S3LIST = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
               echo "${S3LIST}"
             }
-             slackSend message: "APK generated for ${env.PROJECT_NAME} in branch ${env.branch}, download: at \n - <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.apk| Andoid apk>  <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.ipa| IOS ipa :iphone:>"
-          
-            // echo "list " + env.S3LIST
+             slackSend message: "APK generated for ${env.PROJECT_NAME} in branch ${env.branch}, download: at \n - <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}.amazonaws.com/${env.S3_FILE_NAME}.apk| Andoid apk>  - <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.ipa| IOS ipa :iphone:>"
           }
         }
       }
