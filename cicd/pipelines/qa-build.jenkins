@@ -28,7 +28,7 @@ pipeline {
     }
   }
   environment{
-      PROJECT_NAME = sh(returnStdout: true, script: "git remote -v | head -n1 | awk '{print $2}' | sed -e 's,.*:\(.*/\)\?,,' -e 's/\.git$//'" ).trim()
+      PROJECT_NAME = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
   }
   stages {
        stage('Install Dependencies') {
