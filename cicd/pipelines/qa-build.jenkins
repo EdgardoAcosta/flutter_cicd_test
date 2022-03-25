@@ -59,18 +59,23 @@ pipeline {
     }
     stage('UPLOAD') {
       environment {
+        S3_FILE_NAME = 'app-release.apk'
         S3_BUCKET = 'ef-test-bucket'
+        S3_BUCKET_ZONE = 'us-west-1'
+        S3_SAVE_PATH = ""
+        S3_BUCKET_URL = ""
         S3LIST = ""
       }
       steps{ 
         withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
           container('flutter'){
             sh 'ls'
-            s3Upload bucket: S3_BUCKET,file:'./build/app/outputs/flutter-apk/app-release.apk', acl: 'PublicRead' , pathStyleAccessEnabled: true, payloadSigningEnabled: true
+            s3Upload bucket: S3_BUCKET,file:"./build/app/outputs/flutter-apk/${S3_FILE_NAME}", acl: 'PublicRead' , pathStyleAccessEnabled: true, payloadSigningEnabled: true
             script {
               S3LIST = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
               echo "${S3LIST}"
             }
+             slackSend message: "APK generated for ${env.PROJECT_NAME} in branch ${env.branch}, download: at \n * <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_SAVE_PATH}/${env.S3_FILE_NAME}| andoid apk>"
           
             // echo "list " + env.S3LIST
           }
