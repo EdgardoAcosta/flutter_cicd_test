@@ -57,7 +57,6 @@ pipeline {
           }
       }
     }
-    }
     stage('Build ios IPA') {
       steps{
          container('flutter'){
@@ -83,7 +82,7 @@ pipeline {
               S3LIST = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
               echo "${S3LIST}"
             }
-             slackSend message: "APK generated for ${env.PROJECT_NAME} in branch ${env.branch}, download: at \n - <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.apk| Andoid apk>  <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.ipa| IOS ipa>"
+             slackSend message: "APK generated for ${env.PROJECT_NAME} in branch ${env.branch}, download: at \n - <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.apk| Andoid apk>  <https://${env.S3_BUCKET}.${env.S3_BUCKET_ZONE}/${env.S3_FILE_NAME}.ipa| IOS ipa :iphone:>"
           
             // echo "list " + env.S3LIST
           }
