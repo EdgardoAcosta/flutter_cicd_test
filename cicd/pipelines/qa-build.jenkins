@@ -1,0 +1,49 @@
+#!/usr/bin/env groovy
+def nodeLabel = "jenkins-slave-${UUID.randomUUID().toString()}"
+pipeline {
+
+  environment {
+    POD_NAME = "jenkins-slave-${UUID.randomUUID().toString()}"
+    SLACK_USER_ID = slackUserIdFromEmail "${ghprbActualCommitAuthorEmail}"
+    SLACK_THREAD = ""
+  }
+  agent {
+    kubernetes {
+      inheritFrom nodeLabel
+      defaultContainer 'jnlp'
+      yaml """
+        apiVersion: v1
+        kind: Pod
+        metadata:
+        labels:
+          app: pipeline-job
+        spec:
+          containers:
+          - name: flutter
+            image: 337583525037.dkr.ecr.us-west-2.amazonaws.com/docker-flutter:latest
+            command:
+            - cat
+            tty: true
+      """
+    }
+  }
+  stages {
+    stage('Get projects') {
+        steps{
+            echo 'running from branch ' + env.branch
+        }
+    }
+  }  
+  post {
+    failure {
+        echo 'failure'
+    }
+    success {
+        echo 'success'
+    }
+    unstable {
+        echo 'unstable'
+    }
+  }
+    
+}
