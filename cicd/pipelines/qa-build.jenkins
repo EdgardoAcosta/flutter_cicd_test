@@ -28,7 +28,7 @@ pipeline {
     }
   }
   environment{
-      PROJECT_NAME = sh(returnStdout: true, script: "git config --local remote.origin.url|sed -n 's#.*/\([^.]*\)\.git#\1#p'" ).trim()
+      PROJECT_NAME = sh(returnStdout: true, script: "git remote -v | head -n1 | awk '{print $2}' | sed -e 's,.*:\(.*/\)\?,,' -e 's/\.git$//'" ).trim()
   }
   stages {
        stage('Install Dependencies') {
