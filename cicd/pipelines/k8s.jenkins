@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-
 def nodeLabel = "jenkins-slave-${UUID.randomUUID().toString()}"
 pipeline {
 
@@ -20,7 +19,7 @@ pipeline {
           app: pipeline-job
         spec:
           containers:
-          - name: flutterImage
+          - name: flutter
             image: 337583525037.dkr.ecr.us-west-2.amazonaws.com/docker-flutter:latest
             command:
             - cat
@@ -32,21 +31,49 @@ pipeline {
     stage('Install Dependencies') {
         steps{
           slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} for PR ${ghprbPullLink} by ${ghprbPullAuthorLoginMention}"
-          container('flutterImage'){
+          container('flutter'){
             sh 'flutter doctor'
             sh 'flutter --version'
+            sh 'export PATH="$PATH":"$HOME/.pub-cache/bin"'
+            sh 'dart pub global activate junitreport'
+            sh 'flutter pub get'
           }
         }
     }
     stage('Test') {
       steps{
-        //  container('flutterImage'){
-            // sh 'flutter pub add junitreport'
-            // sh 'flutter pub add junitreport'
-            // sh 'flutter test --reporter json > test_result.jsonl'
-            // sh 'dart pub global run junitreport:tojunit --input test_result.jsonl --output test-results.xml'
-            // junit 'test-results.xml'
-          // }
+         container('flutter'){
+            sh 'flutter test --reporter json > test_result.jsonl'
+            sh 'dart pub global run junitreport:tojunit --input test_result.jsonl --output test-results.xml'
+            junit 'test-results.xml'
+          }
+      }
+    }
+    stage('BUILD') {
+      steps{
+         container('flutter'){
+            sh 'flutter build apk'
+          }
+      }
+    }
+    stage('UPLOAD') {
+      environment {
+        S3_BUCKET = 'ef-test-bucket'
+        S3LIST = ""
+      }
+      steps{ 
+        withAWS(credentials: 'aws-cli-credentials', region: 'us-west-1') {
+          container('flutter'){
+            sh 'ls'
+            s3Upload bucket: S3_BUCKET,file:'./build/app/outputs/flutter-apk/app-release.apk', acl: 'PublicRead' , pathStyleAccessEnabled: true, payloadSigningEnabled: true
+            script {
+              S3LIST = s3FindFiles bucket: S3_BUCKET,  glob: "**", onlyFiles: true
+              echo "${S3LIST}"
+            }
+          
+            // echo "list " + env.S3LIST
+          }
+        }
       }
     }
   }  
